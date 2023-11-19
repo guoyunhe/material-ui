@@ -1,11 +1,19 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
   appDirectory: 'app',
-  browserBuildDirectory: 'public/build',
-  publicPath: '/build/',
-  serverBuildDirectory: 'build',
-  devServerPort: 8002,
-  // TODO: when mui has esm support, remove this (default is esm)
-  // check it https://github.com/mui/material-ui/issues/30671
-  serverModuleFormat: 'cjs',
+  ignoredRouteFiles: ['**/.*'],
+  watchPaths: ['./public', './.env'],
+  server: './server.ts',
+  /**
+   * The following settings are required to deploy Hydrogen apps to Oxygen:
+   */
+  publicPath: (process.env.HYDROGEN_ASSET_BASE_URL ?? '/') + 'build/',
+  assetsBuildDirectory: 'dist/client/build',
+  serverBuildPath: 'dist/worker/index.js',
+  serverMainFields: ['browser', 'module', 'main'],
+  serverConditions: ['worker', process.env.NODE_ENV],
+  serverDependenciesToBundle: 'all',
+  serverModuleFormat: 'esm',
+  serverPlatform: 'neutral',
+  serverMinify: process.env.NODE_ENV === 'production',
 };
